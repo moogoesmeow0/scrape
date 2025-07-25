@@ -57,20 +57,18 @@ pub fn clean_from_csv(titles: Vec<String>) -> Result<Vec<String>, Box<dyn std::e
         .from_reader(File::open(crate::PATH)?);
 
     let mut seen: HashSet<String> = HashSet::new();
-    let mut unique: Vec<String> = vec!();
 
     for result in rdr.deserialize::<Record>() {
         let entry: String = result?.text;
-        if seen.insert(entry.clone()) {
-            unique.push(entry);
-        }
+        seen.insert(entry);
     }
 
+    let mut unique: Vec<String> = vec![];
     for title in titles.iter() {
-        if seen.insert(title.clone()) {
+        if !seen.contains(title) {
             unique.push(title.clone());
         }
     }    
 
-    return Ok(unique)
+    Ok(unique)
 }
