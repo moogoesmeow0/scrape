@@ -50,3 +50,27 @@ pub fn deduplicate_csv(path: &str) -> Result<(), Box<dyn std::error::Error>> {
     wtr.flush()?;
     Ok(())
 }
+
+pub fn clean_from_csv(titles: Vec<String>) -> Result<Vec<String>, Box<dyn std::error::Error>> {
+    let mut rdr = ReaderBuilder::new()
+        .has_headers(false)
+        .from_reader(File::open(crate::PATH)?);
+
+    let mut seen: HashSet<String> = HashSet::new();
+    let mut unique: Vec<String> = vec!();
+
+    for result in rdr.deserialize::<Record>() {
+        let entry: String = result?.text;
+        if seen.insert(entry.clone()) {
+            unique.push(entry);
+        }
+    }
+
+    for title in titles.iter() {
+        if seen.insert(title.clone()) {
+            unique.push(title.clone());
+        }
+    }    
+
+    return Ok(unique)
+}

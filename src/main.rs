@@ -4,9 +4,11 @@ mod analyze;
 mod fetch;
 mod save;
 
+pub const PATH: &str = "./things.csv";
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    save::deduplicate_csv("./things.csv")?;
+    save::deduplicate_csv(PATH)?;
     let urls: Vec<String> = vec![
         "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml",
         "https://www.buzzfeed.com/index.xml",
@@ -31,7 +33,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let titles = analyze::analyze(titles).await?;
 
     dbg!(&titles);
-    save::deduplicate_csv("./things.csv")?;
+    save::deduplicate_csv(PATH)?;
 
     Ok(())
 }

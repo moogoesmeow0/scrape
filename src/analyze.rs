@@ -17,7 +17,7 @@ pub async fn analyze(titles: Vec<String>) -> Result<Vec<(String, i8)>, Box<dyn s
         .typed::<Ranking>();
 
     let mut result: Vec<(String, i8)> = vec![];
-    let mut titles = titles;
+    let mut titles = save::clean_from_csv(titles)?;
     titles.shuffle(&mut rng());
 
     for title in titles {
