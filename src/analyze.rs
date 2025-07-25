@@ -20,6 +20,7 @@ pub async fn analyze(titles: Vec<String>) -> Result<Vec<(String, i8)>, Box<dyn s
     let mut titles = save::clean_from_csv(titles)?;
     titles.shuffle(&mut rng());
     dbg!(&titles);
+    println!("Found {} unique titles", titles.len());
 
     for title in titles {
         let ranking = analyze_title(&title, &task).await;

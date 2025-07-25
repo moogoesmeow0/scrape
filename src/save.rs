@@ -68,7 +68,7 @@ pub fn clean_from_csv(titles: Vec<String>) -> Result<Vec<String>, Box<dyn std::e
         if !seen.contains(title) {
             unique.push(title.clone());
         }
-    }    
+    }
 
     Ok(unique)
 }
