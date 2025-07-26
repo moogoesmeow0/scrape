@@ -38,10 +38,10 @@ async fn fetch_rss_feeds(urls: Vec<String>) -> Result<Vec<Channel>, Box<dyn std:
 }
 
 async fn fetch_rss_feed(url: &str) -> Result<Channel, Box<dyn std::error::Error>> {
-    dbg!(url);
-
     let response = reqwest::get(url).await?.bytes().await?;
     let channel = Channel::read_from(&response[..])?;
+
+    dbg!(url);
     Ok(channel)
 }
 
