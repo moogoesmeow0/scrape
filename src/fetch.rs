@@ -7,6 +7,18 @@ pub async fn fetch(urls: Vec<String>) -> Result<Vec<String>, Box<dyn std::error:
 }
 
 async fn fetch_rss_feeds(urls: Vec<String>) -> Result<Vec<Channel>, Box<dyn std::error::Error>> {
+    // let mut channels = Vec::new();
+    // for url in urls {
+    //     let channel = fetch_rss_feed(&url).await;
+    //
+    //     if let Err(e) = channel {
+    //         eprintln!("Error fetching {}: {}", url, e);
+    //         continue;
+    //     } else if let Ok(channell) = channel {
+    //         channels.push(channell);
+    //     }
+    // }
+
     let futures = urls.iter().map(|url| fetch_rss_feed(url));
     let results: Vec<Result<Channel, Box<dyn std::error::Error>>> = join_all(futures).await;
 
