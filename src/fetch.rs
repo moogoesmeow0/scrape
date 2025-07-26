@@ -7,8 +7,32 @@ pub async fn fetch(urls: Vec<String>) -> Result<Vec<String>, Box<dyn std::error:
 }
 
 async fn fetch_rss_feeds(urls: Vec<String>) -> Result<Vec<Channel>, Box<dyn std::error::Error>> {
+    // let futures = urls.iter().map(|url| fetch_rss_feed(url));
+    // let results: Vec<Result<Channel, Box<dyn std::error::Error>>> = join_all(futures).await;
+    //
+    // let channels: Vec<Channel> = results
+    //     .into_iter()
+    //     .zip(urls.iter())
+    //     .filter_map(|(result, url)| match result {
+    //         Ok(channel) => Some(channel),
+    //         Err(e) => {
+    //             eprintln!("Error fetching {}: {}", url, e);
+    //             None
+    //         }
+    //     })
+    //     .collect();
+    //
+    // Ok(channels)
+
     let futures = urls.iter().map(|url| fetch_rss_feed(url));
-    let results: Vec<Result<Channel, Box<dyn std::error::Error>>> = join_all(futures).await;
+    let mut futures_unordered = FuturesUnordered::new();
+
+    for future in futures {
+        futures_unordered.push(future);
+    }
+
+    let results: Vec<Result<Channel, Box<dyn std::error::Error>>> =
+        futures_unordered.collect().await;
 
     let channels: Vec<Channel> = results
         .into_iter()
@@ -23,31 +47,6 @@ async fn fetch_rss_feeds(urls: Vec<String>) -> Result<Vec<Channel>, Box<dyn std:
         .collect();
 
     Ok(channels)
-
-//================================================================
-
-let futures = urls.iter().map(|url| fetch_rss_feed(url));
-let mut futures_unordered = FuturesUnordered::new();
-
-for future in futures {
-    futures_unordered.push(future);
-}
-
-let results: Vec<Result<Channel, Box<dyn std::error::Error>>> = futures_unordered.collect().await;
-
-let channels: Vec<Channel> = results
-    .into_iter()
-    .zip(urls.iter())
-    .filter_map(|(result, url)| match result {
-        Ok(channel) => Some(channel),
-        Err(e) => {
-            eprintln!("Error fetching {}: {}", url, e);
-            None
-        }
-    })
-    .collect();
-
-Ok(channels)
 }
 
 async fn fetch_rss_feed(url: &str) -> Result<Channel, Box<dyn std::error::Error>> {
