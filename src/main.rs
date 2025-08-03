@@ -25,6 +25,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         "https://www.upworthy.com/feeds/feed.rss",
         "https://theonion.com/feed/",
         "https://www.reddit.com/r/news.rss",
+        "https://www.cbsnews.com/latest/rss/main",
+        "https://www.reddit.com/r/news.rss",
+        "https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en",
+        "https://news.google.com/rss/search?q=site%3Areuters.com&hl=en-US&gl=US&ceid=US%3Aen",
+        "https://feeds.content.dowjones.io/public/rss/RSSOpinion",
+        "https://feeds.content.dowjones.io/public/rss/RSSLifestyle",
+        "https://feeds.content.dowjones.io/public/rss/RSSUSnews",
+        "https://feeds.content.dowjones.io/public/rss/RSSWorldNews",
+        "https://feeds.bbci.co.uk/news/rss.xml",
     ]
     .iter()
     .map(|s| s.to_string())
